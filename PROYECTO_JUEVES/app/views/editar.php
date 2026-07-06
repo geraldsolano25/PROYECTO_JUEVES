@@ -1,10 +1,23 @@
 <?php
 require_once "../../config/database.php";
 
-$id = $_GET['id'];
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+if ($id === false || $id === null || $id <= 0) {
+    header("Location: mis_reservas.php");
+    exit();
+}
+
 $db = Database::conectar();
 
-$r = $db->query("SELECT * FROM reservas WHERE id=$id")->fetch_assoc();
+$stmt = $db->prepare("SELECT * FROM reservas WHERE id = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$r = $stmt->get_result()->fetch_assoc();
+
+if (!$r) {
+    header("Location: mis_reservas.php");
+    exit();
+}
 ?>
 
 <link rel="stylesheet" href="/public/css/styles.css">
