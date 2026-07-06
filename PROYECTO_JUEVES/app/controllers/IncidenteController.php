@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once "../helpers/auth.php";
 require_once "../models/Incidente.php";
 
 if (!isset($_SESSION['usuario'])) {
@@ -26,6 +27,8 @@ if (isset($_POST['crear_reporte'])) {
 }
 
 if (isset($_POST['actualizar_estado'])) {
+    requerirAdmin();
+
     $id_reporte = $_POST['id_reporte'];
     $estado = $_POST['estado'];
     $prioridad = $_POST['prioridad'];

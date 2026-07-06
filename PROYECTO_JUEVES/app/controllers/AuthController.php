@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion']) && $_POST['
     $correo = $_POST['correo'];
     $password = $_POST['password'];
     $telefono = $_POST['telefono'] ?? null;
-    $rol = $_POST['rol'] ?? 'ciudadano';
+    $rol = 'ciudadano';
 
     Usuario::registrar($nombre, $correo, $password, $telefono, $rol);
     header("Location: ../../public/index.php?registro=1");
