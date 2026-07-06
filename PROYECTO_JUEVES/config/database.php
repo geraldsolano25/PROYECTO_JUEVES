@@ -7,16 +7,17 @@ class Database {
             return self::$conexion;
         }
 
-        $conexion = new mysqli("localhost", "root", "root", "PROYECTO_JUEVES");
+        mysqli_report(MYSQLI_REPORT_OFF);
+        $conexion = @new mysqli("localhost", "root", "", "PROYECTO_JUEVES");
 
         if ($conexion->connect_error) {
-            $base = new mysqli("localhost", "root", "root");
+            $base = new mysqli("localhost", "root", "");
             if ($base->connect_error) {
                 die("Error de conexión: " . $base->connect_error);
             }
             $base->query("CREATE DATABASE IF NOT EXISTS PROYECTO_JUEVES");
             $base->close();
-            $conexion = new mysqli("localhost", "root", "root", "PROYECTO_JUEVES");
+            $conexion = new mysqli("localhost", "root", "", "PROYECTO_JUEVES");
         }
 
         if ($conexion->connect_error) {

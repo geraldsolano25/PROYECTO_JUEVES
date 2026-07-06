@@ -8,22 +8,16 @@
 body {
     background: linear-gradient(135deg, #eef4ff, #f9fbff);
     min-height: 100vh;
-    padding: 20px;
     color: #23374d;
-}
-
-.container {
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    width: 100%;
-    max-width: 480px;
-    margin: 40px auto;
 }
 
 .container.wide {
     max-width: 960px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    margin: 40px auto;
 }
 
 h1, h2, h3 {
@@ -31,7 +25,7 @@ h1, h2, h3 {
     color: #23374d;
 }
 
-input, select, textarea {
+input:not(.form-control), select:not(.form-select), textarea:not(.form-control) {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
@@ -44,7 +38,7 @@ textarea {
     resize: vertical;
 }
 
-button {
+button:not(.btn):not(.navbar-toggler) {
     width: 100%;
     padding: 10px;
     background: #2563eb;
@@ -55,22 +49,22 @@ button {
     margin-top: 8px;
 }
 
-button:hover {
+button:not(.btn):not(.navbar-toggler):hover {
     background: #1d4ed8;
 }
 
-a {
+a:not(.btn):not(.nav-link):not(.navbar-brand) {
     display: inline-block;
     margin-top: 10px;
     color: #2563eb;
     text-decoration: none;
 }
 
-a:hover {
+a:not(.btn):not(.nav-link):not(.navbar-brand):hover {
     text-decoration: underline;
 }
 
-.card {
+.card:not(.shadow-sm) {
     background: #f8fbff;
     border: 1px solid #dce8fb;
     border-radius: 8px;
