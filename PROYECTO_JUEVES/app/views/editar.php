@@ -7,7 +7,7 @@ $db = Database::conectar();
 $r = $db->query("SELECT * FROM reservas WHERE id=$id")->fetch_assoc();
 ?>
 
-<link rel="stylesheet" href="/mi_proyecto/public/css/styles.css">
+<link rel="stylesheet" href="/public/css/styles.css">
 
 <div class="container">
     <h2>Editar Reserva</h2>

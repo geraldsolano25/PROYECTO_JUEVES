@@ -14,7 +14,7 @@ $reservas = Reserva::obtenerPorUsuario($_SESSION['usuario']['id']);
 <html>
 <head>
     <title>Mis Reservas</title>
-    <link rel="stylesheet" href="/mi_proyecto/public/css/styles.css">
+    <link rel="stylesheet" href="/public/css/styles.css">
 </head>
 <body>
 

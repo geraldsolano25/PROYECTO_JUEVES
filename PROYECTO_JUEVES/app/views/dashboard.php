@@ -20,7 +20,7 @@ $esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
     <meta charset="UTF-8">
     <title>Página principal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/mi_proyecto/public/css/styles.css">
+    <link rel="stylesheet" href="/public/css/styles.css">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">

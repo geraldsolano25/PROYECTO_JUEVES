@@ -18,7 +18,7 @@ $editar = isset($_GET['editar']) ? Categoria::obtenerPorId($_GET['editar']) : nu
     <title>CRUD Categorías</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/mi_proyecto/public/css/styles.css">
+    <link rel="stylesheet" href="/public/css/styles.css">
 </head>
 <body>
 <div class="container py-4">
