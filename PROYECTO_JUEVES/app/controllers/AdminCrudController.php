@@ -1,16 +1,10 @@
 <?php
-session_start();
+require_once "../helpers/auth.php";
 require_once "../models/Usuario.php";
 require_once "../models/Categoria.php";
 require_once "../models/Incidente.php";
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: ../../public/index.php");
-    exit();
-}
-
-$esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
-$puedeGestionarCategorias = isset($_SESSION['usuario']['id_usuario']) || $esAdmin;
+requerirAdmin();
 
 if (isset($_POST['guardar_usuario'])) {
     $guardado = Usuario::guardar($_POST['nombre'], $_POST['correo'], $_POST['password'], $_POST['telefono'], $_POST['rol'], $_POST['estado']);

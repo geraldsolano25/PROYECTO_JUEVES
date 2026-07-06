@@ -1,14 +1,10 @@
 <?php
-session_start();
+require_once "../helpers/auth.php";
 require_once "../models/Incidente.php";
 require_once "../models/Categoria.php";
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: ../../public/index.php");
-    exit();
-}
+requerirAdmin();
 
-$esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
 $reportes = Incidente::obtenerTodos();
 $categorias = Categoria::obtenerTodas();
 $editar = isset($_GET['editar']) ? Incidente::obtenerPorId($_GET['editar']) : null;
@@ -50,10 +46,6 @@ $editar = isset($_GET['editar']) ? Incidente::obtenerPorId($_GET['editar']) : nu
                     </button>
                 </div>
             </form>
-            <?php if (!$esAdmin): ?>
-                <div class="alert alert-secondary py-2">Solo los administradores pueden gestionar reportes.</div>
-            <?php endif; ?>
-
             <table id="tablaReportes" class="table table-striped table-hover">
                 <thead><tr><th>ID</th><th>Título</th><th>Usuario</th><th>Categoría</th><th>Estado</th><th>Prioridad</th><th>Acciones</th></tr></thead>
                 <tbody>

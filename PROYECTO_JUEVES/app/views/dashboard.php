@@ -32,12 +32,14 @@ $esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
         <div class="collapse navbar-collapse" id="menuPrincipal">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="dashboard.php">Inicio</a></li>
+                <?php if ($esAdmin): ?>
                 <li class="nav-item"><a class="nav-link" href="crud_usuarios.php">Usuarios</a></li>
                 <li class="nav-item"><a class="nav-link" href="crud_categorias.php">Categorías</a></li>
                 <li class="nav-item"><a class="nav-link" href="crud_reportes.php">Reportes</a></li>
                 <li class="nav-item"><a class="nav-link" href="crud_seguimientos.php">Seguimientos</a></li>
                 <li class="nav-item"><a class="nav-link" href="crud_votos.php">Votos</a></li>
-                <li class="nav-item"><a class="nav-link" href="mis_reservas.php">Mis reservas</a></li>
+                <?php endif; ?>
+                <li class="nav-item"><a class="nav-link" href="mis_reservas.php">Mis reportes</a></li>
             </ul>
             <a class="btn btn-outline-light btn-sm" href="../controllers/AuthController.php?logout=true">Cerrar sesión</a>
         </div>
@@ -54,6 +56,10 @@ $esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
 
     <?php if (isset($_GET['success'])): ?>
         <div class="alert alert-success">✅ Reporte registrado correctamente.</div>
+    <?php endif; ?>
+
+    <?php if (isset($_GET['error']) && $_GET['error'] === 'sin_permiso'): ?>
+        <div class="alert alert-warning">No tiene permisos para acceder a esa secciÃ³n.</div>
     <?php endif; ?>
 
     <div class="card shadow-sm mb-4" id="reportar">

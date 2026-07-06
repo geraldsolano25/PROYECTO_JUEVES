@@ -1,13 +1,9 @@
 <?php
-session_start();
+require_once "../helpers/auth.php";
 require_once "../models/Incidente.php";
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: ../../public/index.php");
-    exit();
-}
+requerirAdmin();
 
-$esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
 $reportes = Incidente::obtenerTodos();
 ?>
 <!DOCTYPE html>
@@ -27,10 +23,6 @@ $reportes = Incidente::obtenerTodos();
                 <h2 class="mb-0">Gestión de votos</h2>
                 <a href="administracion.php" class="btn btn-outline-secondary">Volver</a>
             </div>
-
-            <?php if (!$esAdmin): ?>
-                <div class="alert alert-secondary py-2">Solo los administradores pueden ver el resumen de votos.</div>
-            <?php endif; ?>
 
             <table id="tablaVotos" class="table table-striped table-hover">
                 <thead>

@@ -1,13 +1,9 @@
 <?php
-session_start();
+require_once "../helpers/auth.php";
 require_once "../models/Categoria.php";
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: ../../public/index.php");
-    exit();
-}
+requerirAdmin();
 
-$esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
 $categorias = Categoria::obtenerTodas();
 $editar = isset($_GET['editar']) ? Categoria::obtenerPorId($_GET['editar']) : null;
 ?>
@@ -41,10 +37,6 @@ $editar = isset($_GET['editar']) ? Categoria::obtenerPorId($_GET['editar']) : nu
                     </button>
                 </div>
             </form>
-            <?php if (!$esAdmin): ?>
-                <div class="alert alert-secondary py-2">Solo los administradores pueden guardar cambios en categorías.</div>
-            <?php endif; ?>
-
             <table id="tablaCategorias" class="table table-striped table-hover">
                 <thead><tr><th>ID</th><th>Nombre</th><th>Descripción</th><th>Estado</th><th>Acciones</th></tr></thead>
                 <tbody>

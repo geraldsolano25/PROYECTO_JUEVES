@@ -1,11 +1,8 @@
 <?php
-session_start();
+require_once "../helpers/auth.php";
 require_once "../models/Incidente.php";
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: ../../public/index.php");
-    exit();
-}
+requerirAdmin();
 
 $reportes = Incidente::obtenerTodos();
 ?>

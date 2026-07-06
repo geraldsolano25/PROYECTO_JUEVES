@@ -1,13 +1,9 @@
 <?php
-session_start();
+require_once "../helpers/auth.php";
 require_once "../models/Incidente.php";
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: ../../public/index.php");
-    exit();
-}
+requerirAdmin();
 
-$esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
 $seguimientos = null;
 if (isset($_GET['reporte'])) {
     $seguimientos = Incidente::obtenerSeguimiento($_GET['reporte']);
@@ -43,10 +39,6 @@ $reportes = Incidente::obtenerTodos();
                     </select>
                 </div>
             </form>
-            <?php if (!$esAdmin): ?>
-                <div class="alert alert-secondary py-2">Solo los administradores pueden ver el historial completo de seguimientos.</div>
-            <?php endif; ?>
-
             <?php if ($seguimientos !== null): ?>
                 <table class="table table-striped table-hover">
                     <thead>

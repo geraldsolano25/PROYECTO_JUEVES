@@ -1,13 +1,9 @@
 <?php
-session_start();
+require_once "../helpers/auth.php";
 require_once "../models/Usuario.php";
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: ../../public/index.php");
-    exit();
-}
+requerirAdmin();
 
-$esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
 $usuarios = Usuario::obtenerTodos();
 $editar = isset($_GET['editar']) ? Usuario::obtenerPorId($_GET['editar']) : null;
 ?>
@@ -51,10 +47,6 @@ $editar = isset($_GET['editar']) ? Usuario::obtenerPorId($_GET['editar']) : null
                     </button>
                 </div>
             </form>
-            <?php if (!$esAdmin): ?>
-                <div class="alert alert-secondary py-2">Solo los administradores pueden gestionar usuarios.</div>
-            <?php endif; ?>
-
             <table id="tablaUsuarios" class="table table-striped table-hover">
                 <thead>
                     <tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr>
