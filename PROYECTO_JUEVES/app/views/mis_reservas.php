@@ -15,7 +15,7 @@ $misReportes = Incidente::obtenerPorUsuario($_SESSION['usuario']['id_usuario']);
     <meta charset="UTF-8">
     <title>Mis reportes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="../../public/css/styles.css">
 </head>
 <body>
 <div class="container py-4">

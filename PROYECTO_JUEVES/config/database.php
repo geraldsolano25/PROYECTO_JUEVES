@@ -6,18 +6,18 @@ class Database {
         if (self::$conexion !== null) {
             return self::$conexion;
         }
-
+        //Recordar de cambiar credenciales del respectivo user de MySQL a la hora de probar el codigo
         mysqli_report(MYSQLI_REPORT_OFF);
-        $conexion = @new mysqli("localhost", "root", "", "PROYECTO_JUEVES");
+        $conexion = @new mysqli("localhost", "root", "admin", "PROYECTO_JUEVES");
 
         if ($conexion->connect_error) {
-            $base = new mysqli("localhost", "root", "");
+            $base = new mysqli("localhost", "root", "admin");
             if ($base->connect_error) {
                 die("Error de conexión: " . $base->connect_error);
             }
             $base->query("CREATE DATABASE IF NOT EXISTS PROYECTO_JUEVES");
             $base->close();
-            $conexion = new mysqli("localhost", "root", "", "PROYECTO_JUEVES");
+            $conexion = new mysqli("localhost", "root", "admin", "PROYECTO_JUEVES");
         }
 
         if ($conexion->connect_error) {

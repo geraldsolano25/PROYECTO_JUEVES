@@ -12,7 +12,7 @@ $reportes = Incidente::obtenerTodos();
 <head>
     <meta charset="UTF-8">
     <title>Administración</title>
-    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="../../public/css/styles.css">
 </head>
 <body>
 <div class="container wide">
