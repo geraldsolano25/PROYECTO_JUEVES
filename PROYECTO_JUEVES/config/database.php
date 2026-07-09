@@ -1,6 +1,20 @@
 <?php
 class Database {
     private static $conexion = null;
+    private static $host = "localhost";
+    private static $usuario = "root";
+    private static $passwords = ["", "root", "admin"];
+
+    private static function conectarMysql($baseDatos = null) {
+        foreach (self::$passwords as $password) {
+            $conexion = @new mysqli(self::$host, self::$usuario, $password, $baseDatos);
+            if (!$conexion->connect_error) {
+                return $conexion;
+            }
+        }
+
+        return $conexion;
+    }
 
     public static function conectar() {
         if (self::$conexion !== null) {
@@ -8,16 +22,16 @@ class Database {
         }
         //Recordar de cambiar credenciales del respectivo user de MySQL a la hora de probar el codigo
         mysqli_report(MYSQLI_REPORT_OFF);
-        $conexion = @new mysqli("localhost", "root", "admin", "PROYECTO_JUEVES");
+        $conexion = self::conectarMysql("PROYECTO_JUEVES");
 
         if ($conexion->connect_error) {
-            $base = new mysqli("localhost", "root", "admin");
+            $base = self::conectarMysql();
             if ($base->connect_error) {
                 die("Error de conexión: " . $base->connect_error);
             }
             $base->query("CREATE DATABASE IF NOT EXISTS PROYECTO_JUEVES");
             $base->close();
-            $conexion = new mysqli("localhost", "root", "admin", "PROYECTO_JUEVES");
+            $conexion = self::conectarMysql("PROYECTO_JUEVES");
         }
 
         if ($conexion->connect_error) {
