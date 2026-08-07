@@ -149,4 +149,59 @@ class Incidente {
         $resultado = $stmt->get_result();
         return $resultado->fetch_assoc()['total'];
     }
+
+    public static function resumenEstadistico() {
+        $db = Database::conectar();
+        $resultado = $db->query("SELECT
+            COUNT(*) AS total,
+            SUM(estado = 'pendiente') AS pendientes,
+            SUM(estado = 'en_revision') AS en_revision,
+            SUM(estado = 'en_proceso') AS en_proceso,
+            SUM(estado = 'resuelto') AS resueltos,
+            SUM(estado = 'rechazado') AS rechazados
+            FROM reportes");
+
+        return $resultado->fetch_assoc();
+    }
+
+    public static function reportesPorEstado() {
+        $db = Database::conectar();
+        return $db->query("SELECT estado, COUNT(*) AS total FROM reportes GROUP BY estado ORDER BY total DESC, estado ASC");
+    }
+
+    public static function reportesPorCategoria() {
+        $db = Database::conectar();
+        return $db->query("SELECT c.nombre_categoria, COUNT(r.id_reporte) AS total
+            FROM categorias c
+            LEFT JOIN reportes r ON r.id_categoria = c.id_categoria
+            GROUP BY c.id_categoria, c.nombre_categoria
+            ORDER BY total DESC, c.nombre_categoria ASC");
+    }
+
+    public static function zonasConMasReportes($limite = 5) {
+        $limite = self::idPositivo($limite) ?? 5;
+        $db = Database::conectar();
+        $stmt = $db->prepare("SELECT provincia, canton, distrito, COUNT(*) AS total
+            FROM reportes
+            GROUP BY provincia, canton, distrito
+            ORDER BY total DESC, provincia ASC, canton ASC, distrito ASC
+            LIMIT ?");
+        $stmt->bind_param("i", $limite);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    public static function reportesMasVotados($limite = 5) {
+        $limite = self::idPositivo($limite) ?? 5;
+        $db = Database::conectar();
+        $stmt = $db->prepare("SELECT r.titulo, r.estado, r.prioridad, COUNT(v.id_voto) AS votos
+            FROM reportes r
+            LEFT JOIN votos_reportes v ON v.id_reporte = r.id_reporte
+            GROUP BY r.id_reporte, r.titulo, r.estado, r.prioridad
+            ORDER BY votos DESC, r.fecha_creacion DESC
+            LIMIT ?");
+        $stmt->bind_param("i", $limite);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
 }

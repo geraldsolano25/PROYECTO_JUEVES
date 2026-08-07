@@ -12,6 +12,7 @@
                 <li class="nav-item"><a class="nav-link" href="crud_reportes.php">Reportes</a></li>
                 <li class="nav-item"><a class="nav-link" href="crud_seguimientos.php">Seguimientos</a></li>
                 <li class="nav-item"><a class="nav-link" href="crud_votos.php">Votos</a></li>
+                <li class="nav-item"><a class="nav-link" href="estadisticas.php">Estadisticas</a></li>
             </ul>
             <a class="btn btn-outline-light btn-sm" href="../controllers/AuthController.php?logout=true">Cerrar sesión</a>
         </div>
