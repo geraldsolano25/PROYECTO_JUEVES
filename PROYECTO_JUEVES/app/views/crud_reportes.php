@@ -2,6 +2,7 @@
 require_once "../helpers/auth.php";
 require_once "../models/Incidente.php";
 require_once "../models/Categoria.php";
+require_once "../helpers/report_format.php";
 
 requerirAdmin();
 
@@ -37,8 +38,20 @@ $editar = isset($_GET['editar']) ? Incidente::obtenerPorId($_GET['editar']) : nu
                 <div class="col-md-3"><input type="text" class="form-control" name="canton" placeholder="Cantón" value="<?= $editar['canton'] ?? '' ?>" required></div>
                 <div class="col-md-3"><input type="text" class="form-control" name="provincia" placeholder="Provincia" value="<?= $editar['provincia'] ?? '' ?>" required></div>
                 <div class="col-md-3"><input type="text" class="form-control" name="imagen" placeholder="URL imagen" value="<?= $editar['imagen'] ?? '' ?>"></div>
-                <div class="col-md-3"><select class="form-select" name="estado"><option value="pendiente" <?= ($editar['estado'] ?? 'pendiente') == 'pendiente' ? 'selected' : '' ?>>Pendiente</option><option value="en_proceso" <?= ($editar['estado'] ?? '') == 'en_proceso' ? 'selected' : '' ?>>En proceso</option><option value="resuelto" <?= ($editar['estado'] ?? '') == 'resuelto' ? 'selected' : '' ?>>Resuelto</option></select></div>
-                <div class="col-md-3"><select class="form-select" name="prioridad"><option value="baja" <?= ($editar['prioridad'] ?? 'media') == 'baja' ? 'selected' : '' ?>>Baja</option><option value="media" <?= ($editar['prioridad'] ?? 'media') == 'media' ? 'selected' : '' ?>>Media</option><option value="alta" <?= ($editar['prioridad'] ?? 'media') == 'alta' ? 'selected' : '' ?>>Alta</option></select></div>
+                <div class="col-md-3">
+                    <select class="form-select" name="estado">
+                        <?php foreach (estadosReporte() as $valor => $texto): ?>
+                            <option value="<?= $valor ?>" <?= ($editar['estado'] ?? 'pendiente') == $valor ? 'selected' : '' ?>><?= $texto ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="prioridad">
+                        <?php foreach (prioridadesReporte() as $valor => $texto): ?>
+                            <option value="<?= $valor ?>" <?= ($editar['prioridad'] ?? 'media') == $valor ? 'selected' : '' ?>><?= $texto ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
                 <div class="col-md-6"><textarea class="form-control" name="descripcion" placeholder="Descripción" required><?= $editar['descripcion'] ?? '' ?></textarea></div>
                 <div class="col-md-3">
                     <button type="submit" class="btn btn-primary w-100" name="<?= isset($editar) && $editar !== null ? 'editar_reporte' : 'guardar_reporte' ?>">
@@ -55,8 +68,8 @@ $editar = isset($_GET['editar']) ? Incidente::obtenerPorId($_GET['editar']) : nu
                             <td><?= $r['titulo'] ?></td>
                             <td><?= $r['nombre'] ?></td>
                             <td><?= $r['nombre_categoria'] ?></td>
-                            <td><span class="badge bg-<?= $r['estado'] == 'resuelto' ? 'success' : ($r['estado'] == 'en_proceso' ? 'warning' : 'secondary') ?>"><?= $r['estado'] ?></span></td>
-                            <td><span class="badge bg-<?= $r['prioridad'] == 'alta' ? 'danger' : ($r['prioridad'] == 'media' ? 'warning' : 'secondary') ?>"><?= $r['prioridad'] ?></span></td>
+                            <td><span class="status-badge <?= estadoReporteClass($r['estado']) ?>"><?= estadoReporteLabel($r['estado']) ?></span></td>
+                            <td><span class="priority-badge <?= prioridadReporteClass($r['prioridad']) ?>"><?= prioridadReporteLabel($r['prioridad']) ?></span></td>
                             <td>
                                 <a href="crud_reportes.php?editar=<?= $r['id_reporte'] ?>" class="btn btn-sm btn-outline-primary">Editar</a>
                                 <a href="../controllers/AdminCrudController.php?eliminar_reporte=<?= $r['id_reporte'] ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar reporte?')">Eliminar</a>

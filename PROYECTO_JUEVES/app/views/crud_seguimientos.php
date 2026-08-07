@@ -1,6 +1,7 @@
 <?php
 require_once "../helpers/auth.php";
 require_once "../models/Incidente.php";
+require_once "../helpers/report_format.php";
 
 requerirAdmin();
 
@@ -50,8 +51,8 @@ $reportes = Incidente::obtenerTodos();
                                 <td><?= $s['id_seguimiento'] ?></td>
                                 <td><?= $s['id_reporte'] ?></td>
                                 <td><?= $s['nombre'] ?></td>
-                                <td><?= $s['estado_anterior'] ?></td>
-                                <td><?= $s['estado_nuevo'] ?></td>
+                                <td><span class="status-badge <?= estadoReporteClass($s['estado_anterior']) ?>"><?= estadoReporteLabel($s['estado_anterior']) ?></span></td>
+                                <td><span class="status-badge <?= estadoReporteClass($s['estado_nuevo']) ?>"><?= estadoReporteLabel($s['estado_nuevo']) ?></span></td>
                                 <td><?= $s['comentario'] ?></td>
                                 <td><?= $s['fecha_cambio'] ?></td>
                             </tr>

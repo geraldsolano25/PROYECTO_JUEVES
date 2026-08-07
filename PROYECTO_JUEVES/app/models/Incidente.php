@@ -2,12 +2,25 @@
 require_once "../../config/database.php";
 
 class Incidente {
+    private static $estadosPermitidos = ['pendiente', 'en_revision', 'en_proceso', 'resuelto', 'rechazado'];
+    private static $prioridadesPermitidas = ['baja', 'media', 'alta'];
+
     private static function idPositivo($valor) {
         $id = filter_var($valor, FILTER_VALIDATE_INT);
         return $id !== false && $id > 0 ? $id : null;
     }
 
+    private static function normalizarEstado($estado) {
+        return in_array($estado, self::$estadosPermitidos, true) ? $estado : 'pendiente';
+    }
+
+    private static function normalizarPrioridad($prioridad) {
+        return in_array($prioridad, self::$prioridadesPermitidas, true) ? $prioridad : 'media';
+    }
+
     public static function crear($id_usuario, $id_categoria, $titulo, $descripcion, $ubicacion, $distrito, $canton, $provincia, $imagen, $estado, $prioridad) {
+        $estado = self::normalizarEstado($estado);
+        $prioridad = self::normalizarPrioridad($prioridad);
         $db = Database::conectar();
         $sql = "INSERT INTO reportes (id_usuario, id_categoria, titulo, descripcion, ubicacion, distrito, canton, provincia, imagen, estado, prioridad, fecha_creacion, fecha_actualizacion)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
@@ -42,6 +55,8 @@ class Incidente {
     public static function actualizarEstado($id_reporte, $estado, $prioridad, $comentario, $id_usuario_admin) {
         $id_reporte = self::idPositivo($id_reporte);
         $id_usuario_admin = self::idPositivo($id_usuario_admin);
+        $estado = self::normalizarEstado($estado);
+        $prioridad = self::normalizarPrioridad($prioridad);
         if ($id_reporte === null || $id_usuario_admin === null) {
             return false;
         }
@@ -67,6 +82,8 @@ class Incidente {
     public static function actualizar($id_reporte, $id_categoria, $titulo, $descripcion, $ubicacion, $distrito, $canton, $provincia, $imagen, $estado, $prioridad) {
         $id_reporte = self::idPositivo($id_reporte);
         $id_categoria = self::idPositivo($id_categoria);
+        $estado = self::normalizarEstado($estado);
+        $prioridad = self::normalizarPrioridad($prioridad);
         if ($id_reporte === null || $id_categoria === null) {
             return false;
         }

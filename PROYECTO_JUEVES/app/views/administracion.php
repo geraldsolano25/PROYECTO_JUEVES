@@ -1,6 +1,7 @@
 <?php
 require_once "../helpers/auth.php";
 require_once "../models/Incidente.php";
+require_once "../helpers/report_format.php";
 
 requerirAdmin();
 
@@ -25,18 +26,19 @@ $reportes = Incidente::obtenerTodos();
             <strong><?= $r['titulo'] ?></strong><br>
             Ciudadano: <?= $r['nombre'] ?> | Categoría: <?= $r['nombre_categoria'] ?><br>
             Descripción: <?= $r['descripcion'] ?><br>
-            Estado actual: <?= $r['estado'] ?> | Prioridad: <?= $r['prioridad'] ?><br>
+            <span class="status-badge <?= estadoReporteClass($r['estado']) ?>"><?= estadoReporteLabel($r['estado']) ?></span>
+            <span class="priority-badge <?= prioridadReporteClass($r['prioridad']) ?>"><?= prioridadReporteLabel($r['prioridad']) ?></span><br>
             <form method="POST" action="../controllers/IncidenteController.php">
                 <input type="hidden" name="id_reporte" value="<?= $r['id_reporte'] ?>">
                 <select name="estado">
-                    <option value="pendiente" <?= $r['estado'] == 'pendiente' ? 'selected' : '' ?>>Pendiente</option>
-                    <option value="en_proceso" <?= $r['estado'] == 'en_proceso' ? 'selected' : '' ?>>En proceso</option>
-                    <option value="resuelto" <?= $r['estado'] == 'resuelto' ? 'selected' : '' ?>>Resuelto</option>
+                    <?php foreach (estadosReporte() as $valor => $texto): ?>
+                        <option value="<?= $valor ?>" <?= $r['estado'] == $valor ? 'selected' : '' ?>><?= $texto ?></option>
+                    <?php endforeach; ?>
                 </select>
                 <select name="prioridad">
-                    <option value="baja" <?= $r['prioridad'] == 'baja' ? 'selected' : '' ?>>Baja</option>
-                    <option value="media" <?= $r['prioridad'] == 'media' ? 'selected' : '' ?>>Media</option>
-                    <option value="alta" <?= $r['prioridad'] == 'alta' ? 'selected' : '' ?>>Alta</option>
+                    <?php foreach (prioridadesReporte() as $valor => $texto): ?>
+                        <option value="<?= $valor ?>" <?= $r['prioridad'] == $valor ? 'selected' : '' ?>><?= $texto ?></option>
+                    <?php endforeach; ?>
                 </select>
                 <textarea name="comentario" placeholder="Comentario de seguimiento"></textarea>
                 <button type="submit" name="actualizar_estado">Actualizar</button>

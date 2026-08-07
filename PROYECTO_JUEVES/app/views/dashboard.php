@@ -2,6 +2,7 @@
 session_start();
 require_once "../models/Categoria.php";
 require_once "../models/Incidente.php";
+require_once "../helpers/report_format.php";
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: ../../public/index.php");
@@ -87,7 +88,8 @@ $esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
                     <div class="border rounded p-3 mb-2">
                         <strong><?= $r['titulo'] ?></strong><br>
                         <span class="text-muted"><?= $r['nombre_categoria'] ?></span><br>
-                        Estado: <?= $r['estado'] ?> | Prioridad: <?= $r['prioridad'] ?><br>
+                        <span class="status-badge <?= estadoReporteClass($r['estado']) ?>"><?= estadoReporteLabel($r['estado']) ?></span>
+                        <span class="priority-badge <?= prioridadReporteClass($r['prioridad']) ?>"><?= prioridadReporteLabel($r['prioridad']) ?></span><br>
                         <?= $r['descripcion'] ?><br>
                         <small>Creado: <?= $r['fecha_creacion'] ?></small>
                     </div>
@@ -107,7 +109,11 @@ $esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
                     <span class="text-muted"><?= $r['nombre'] ?> · <?= $r['nombre_categoria'] ?></span><br>
                     <?= $r['descripcion'] ?><br>
                     Ubicación: <?= $r['ubicacion'] ?>, <?= $r['distrito'] ?>, <?= $r['canton'] ?>, <?= $r['provincia'] ?><br>
-                    Estado: <?= $r['estado'] ?> | Prioridad: <?= $r['prioridad'] ?> | Votos: <?= Incidente::contarVotos($r['id_reporte']) ?><br>
+                    <div class="report-meta">
+                        <span class="status-badge <?= estadoReporteClass($r['estado']) ?>"><?= estadoReporteLabel($r['estado']) ?></span>
+                        <span class="priority-badge <?= prioridadReporteClass($r['prioridad']) ?>"><?= prioridadReporteLabel($r['prioridad']) ?></span>
+                        <span class="vote-count">Votos: <?= Incidente::contarVotos($r['id_reporte']) ?></span>
+                    </div>
                     <a href="../controllers/IncidenteController.php?votar=<?= $r['id_reporte'] ?>" class="btn btn-sm btn-outline-primary mt-2">Votar prioridad</a>
                 </div>
             <?php endwhile; ?>

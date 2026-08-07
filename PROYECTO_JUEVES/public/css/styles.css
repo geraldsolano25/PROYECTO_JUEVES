@@ -295,6 +295,85 @@ textarea:not(.form-control) {
     background-color: var(--secondary-text) !important;
 }
 
+.status-badge,
+.priority-badge,
+.vote-count {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0;
+    margin: 3px 4px 3px 0;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+.status-pendiente {
+    background: #eef2f6;
+    color: #46525e;
+    border-color: #cfd8e3;
+}
+
+.status-revision {
+    background: #e4edf8;
+    color: #245987;
+    border-color: #b9d0ea;
+}
+
+.status-proceso {
+    background: #fbf0dd;
+    color: #8a5a13;
+    border-color: #e4c990;
+}
+
+.status-resuelto {
+    background: #e1f0e7;
+    color: #1f5c3f;
+    border-color: #b8dcc6;
+}
+
+.status-rechazado {
+    background: #f6e4e4;
+    color: #7a2626;
+    border-color: #e4bcbc;
+}
+
+.priority-baja {
+    background: #edf3ee;
+    color: #52715c;
+    border-color: #cbd8cf;
+}
+
+.priority-media {
+    background: #f8efd9;
+    color: #7c5b18;
+    border-color: #dec68a;
+}
+
+.priority-alta {
+    background: #f5e0dd;
+    color: #8a2f26;
+    border-color: #ddb5af;
+}
+
+.vote-count {
+    background: #eef1f4;
+    color: var(--text-muted);
+    border-color: var(--border);
+}
+
+.report-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2px;
+    margin: 6px 0;
+}
+
 
 .table th {
     background: var(--ink-900);
