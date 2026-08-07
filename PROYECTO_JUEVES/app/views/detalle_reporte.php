@@ -28,11 +28,8 @@ $seguimientos = Incidente::obtenerSeguimiento($reporte['id_reporte']);
     <link rel="stylesheet" href="../../public/css/styles.css">
 </head>
 <body>
+<?php include "partials/main_nav.php"; ?>
 <div class="container py-4">
-    <?php if ($esAdmin): ?>
-        <?php include "partials/admin_nav.php"; ?>
-    <?php endif; ?>
-
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
         <div>
             <h2 class="mb-0">Detalle del reporte</h2>
@@ -54,11 +51,12 @@ $seguimientos = Incidente::obtenerSeguimiento($reporte['id_reporte']);
                 </div>
             </div>
             <p class="mt-3 mb-2"><?= $reporte['descripcion'] ?></p>
+            <?= imagenReporteHtml($reporte['imagen'] ?? '', $reporte['titulo']) ?>
             <div class="text-muted small">
                 Zona: <?= $reporte['distrito'] ?>, <?= $reporte['canton'] ?>, <?= $reporte['provincia'] ?><br>
                 Creado: <?= $reporte['fecha_creacion'] ?> · Ultima actualizacion: <?= $reporte['fecha_actualizacion'] ?>
             </div>
-            <?php if (!empty($reporte['imagen'])): ?>
+            <?php if (!empty($reporte['imagen']) && !esImagenReporte($reporte['imagen'])): ?>
                 <a href="<?= $reporte['imagen'] ?>" target="_blank" rel="noopener">Ver evidencia</a>
             <?php endif; ?>
         </div>

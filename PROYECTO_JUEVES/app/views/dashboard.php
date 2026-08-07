@@ -20,7 +20,6 @@ $filtrosReportes = [
 ];
 $hayFiltros = array_filter($filtrosReportes, fn($valor) => trim((string) $valor) !== '') !== [];
 $reportes = Incidente::obtenerFiltrados($filtrosReportes);
-$esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
 ?>
 
 <!DOCTYPE html>
@@ -32,29 +31,7 @@ $esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
     <link rel="stylesheet" href="../../public/css/styles.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
-    <div class="container">
-        <a class="navbar-brand" href="dashboard.php">Inicio</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="menuPrincipal">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="dashboard.php">Inicio</a></li>
-                <?php if ($esAdmin): ?>
-                <li class="nav-item"><a class="nav-link" href="crud_usuarios.php">Usuarios</a></li>
-                <li class="nav-item"><a class="nav-link" href="crud_categorias.php">Categorías</a></li>
-                <li class="nav-item"><a class="nav-link" href="crud_reportes.php">Reportes</a></li>
-                <li class="nav-item"><a class="nav-link" href="crud_seguimientos.php">Seguimientos</a></li>
-                <li class="nav-item"><a class="nav-link" href="crud_votos.php">Votos</a></li>
-                <li class="nav-item"><a class="nav-link" href="estadisticas.php">Estadisticas</a></li>
-                <?php endif; ?>
-                <li class="nav-item"><a class="nav-link" href="mis_reportes.php">Mis reportes</a></li>
-            </ul>
-            <a class="btn btn-outline-light btn-sm" href="../controllers/AuthController.php?logout=true">Cerrar sesión</a>
-        </div>
-    </div>
-</nav>
+<?php include "partials/main_nav.php"; ?>
 
 <div class="container py-2">
     <div class="card shadow-sm mb-4">
@@ -100,6 +77,7 @@ $esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
                         <span class="status-badge <?= estadoReporteClass($r['estado']) ?>"><?= estadoReporteLabel($r['estado']) ?></span>
                         <span class="priority-badge <?= prioridadReporteClass($r['prioridad']) ?>"><?= prioridadReporteLabel($r['prioridad']) ?></span><br>
                         <?= $r['descripcion'] ?><br>
+                        <?= imagenReporteHtml($r['imagen'] ?? '', $r['titulo']) ?>
                         <small>Creado: <?= $r['fecha_creacion'] ?></small>
                         <div class="mt-2">
                             <a href="detalle_reporte.php?id=<?= $r['id_reporte'] ?>" class="btn btn-sm btn-outline-primary">Ver seguimiento</a>
@@ -160,6 +138,7 @@ $esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
                         <strong><?= $r['titulo'] ?></strong><br>
                         <span class="text-muted"><?= $r['nombre'] ?> · <?= $r['nombre_categoria'] ?></span><br>
                         <?= $r['descripcion'] ?><br>
+                        <?= imagenReporteHtml($r['imagen'] ?? '', $r['titulo']) ?>
                         Zona: <?= $r['distrito'] ?>, <?= $r['canton'] ?>, <?= $r['provincia'] ?><br>
                         <div class="report-meta">
                             <span class="status-badge <?= estadoReporteClass($r['estado']) ?>"><?= estadoReporteLabel($r['estado']) ?></span>

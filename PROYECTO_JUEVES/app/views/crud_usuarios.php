@@ -33,7 +33,7 @@ $editar = isset($_GET['editar']) ? Usuario::obtenerPorId($_GET['editar']) : null
                 <div class="alert alert-danger">⚠️ El correo ya está registrado. Intenta con otro.</div>
             <?php endif; ?>
 
-            <form method="POST" action="../controllers/AdminCrudController.php" class="row g-3 mb-3">
+            <form id="form-usuarios" method="POST" action="../controllers/AdminCrudController.php" class="row g-3 mb-3">
                 <input type="hidden" name="id_usuario" value="<?= isset($editar['id_usuario']) ? $editar['id_usuario'] : '' ?>">
                 <div class="col-md-3"><input type="text" class="form-control" name="nombre" placeholder="Nombre" value="<?= $editar['nombre'] ?? '' ?>" required></div>
                 <div class="col-md-3"><input type="email" class="form-control" name="correo" placeholder="Correo" value="<?= $editar['correo'] ?? '' ?>" required></div>
@@ -47,6 +47,7 @@ $editar = isset($_GET['editar']) ? Usuario::obtenerPorId($_GET['editar']) : null
                     </button>
                 </div>
             </form>
+            <div id="tabla-usuarios"></div>
             <table id="tablaUsuarios" class="table table-striped table-hover">
                 <thead>
                     <tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr>
@@ -60,7 +61,7 @@ $editar = isset($_GET['editar']) ? Usuario::obtenerPorId($_GET['editar']) : null
                             <td><?= $u['rol'] ?></td>
                             <td><span class="badge bg-<?= $u['estado'] == 'activo' ? 'success' : 'secondary' ?>"><?= $u['estado'] ?></span></td>
                             <td>
-                                <a href="crud_usuarios.php?editar=<?= $u['id_usuario'] ?>" class="btn btn-sm btn-outline-primary">Editar</a>
+                                <a href="crud_usuarios.php?editar=<?= $u['id_usuario'] ?>#form-usuarios" class="btn btn-sm btn-outline-primary">Editar</a>
                                 <a href="../controllers/AdminCrudController.php?eliminar_usuario=<?= $u['id_usuario'] ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar usuario?')">Eliminar</a>
                             </td>
                         </tr>

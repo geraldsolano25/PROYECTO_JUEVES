@@ -26,7 +26,7 @@ $editar = isset($_GET['editar']) ? Categoria::obtenerPorId($_GET['editar']) : nu
                 <a href="administracion.php" class="btn btn-outline-secondary">Volver</a>
             </div>
 
-            <form method="POST" action="../controllers/AdminCrudController.php" class="row g-3 mb-3">
+            <form id="form-categorias" method="POST" action="../controllers/AdminCrudController.php" class="row g-3 mb-3">
                 <input type="hidden" name="id_categoria" value="<?= isset($editar['id_categoria']) ? $editar['id_categoria'] : '' ?>">
                 <div class="col-md-4"><input type="text" class="form-control" name="nombre_categoria" placeholder="Nombre categoría" value="<?= $editar['nombre_categoria'] ?? '' ?>" required></div>
                 <div class="col-md-4"><textarea class="form-control" name="descripcion" placeholder="Descripción"><?= $editar['descripcion'] ?? '' ?></textarea></div>
@@ -37,6 +37,7 @@ $editar = isset($_GET['editar']) ? Categoria::obtenerPorId($_GET['editar']) : nu
                     </button>
                 </div>
             </form>
+            <div id="tabla-categorias"></div>
             <table id="tablaCategorias" class="table table-striped table-hover">
                 <thead><tr><th>ID</th><th>Nombre</th><th>Descripción</th><th>Estado</th><th>Acciones</th></tr></thead>
                 <tbody>
@@ -47,7 +48,7 @@ $editar = isset($_GET['editar']) ? Categoria::obtenerPorId($_GET['editar']) : nu
                             <td><?= $c['descripcion'] ?></td>
                             <td><span class="badge bg-<?= $c['estado'] == 'activo' ? 'success' : 'secondary' ?>"><?= $c['estado'] ?></span></td>
                             <td>
-                                <a href="crud_categorias.php?editar=<?= $c['id_categoria'] ?>" class="btn btn-sm btn-outline-primary">Editar</a>
+                                <a href="crud_categorias.php?editar=<?= $c['id_categoria'] ?>#form-categorias" class="btn btn-sm btn-outline-primary">Editar</a>
                                 <a href="../controllers/AdminCrudController.php?eliminar_categoria=<?= $c['id_categoria'] ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar categoría?')">Eliminar</a>
                             </td>
                         </tr>
