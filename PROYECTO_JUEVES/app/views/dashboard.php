@@ -39,6 +39,7 @@ $esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
                 <li class="nav-item"><a class="nav-link" href="crud_reportes.php">Reportes</a></li>
                 <li class="nav-item"><a class="nav-link" href="crud_seguimientos.php">Seguimientos</a></li>
                 <li class="nav-item"><a class="nav-link" href="crud_votos.php">Votos</a></li>
+                <li class="nav-item"><a class="nav-link" href="estadisticas.php">Estadisticas</a></li>
                 <?php endif; ?>
                 <li class="nav-item"><a class="nav-link" href="mis_reportes.php">Mis reportes</a></li>
             </ul>
