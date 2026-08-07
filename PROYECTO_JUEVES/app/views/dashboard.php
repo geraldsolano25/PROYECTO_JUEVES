@@ -93,6 +93,9 @@ $esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
                         <span class="priority-badge <?= prioridadReporteClass($r['prioridad']) ?>"><?= prioridadReporteLabel($r['prioridad']) ?></span><br>
                         <?= $r['descripcion'] ?><br>
                         <small>Creado: <?= $r['fecha_creacion'] ?></small>
+                        <div class="mt-2">
+                            <a href="detalle_reporte.php?id=<?= $r['id_reporte'] ?>" class="btn btn-sm btn-outline-primary">Ver seguimiento</a>
+                        </div>
                     </div>
                 <?php endwhile; ?>
             <?php else: ?>

@@ -48,6 +48,9 @@ $misReportes = Incidente::obtenerPorUsuario($_SESSION['usuario']['id_usuario']);
                         <?php if (!empty($r['imagen'])): ?>
                             <a href="<?= $r['imagen'] ?>" target="_blank" rel="noopener">Ver evidencia</a>
                         <?php endif; ?>
+                        <div class="mt-2">
+                            <a href="detalle_reporte.php?id=<?= $r['id_reporte'] ?>" class="btn btn-sm btn-outline-primary">Ver seguimiento</a>
+                        </div>
                     </div>
                 <?php endwhile; ?>
             <?php else: ?>
