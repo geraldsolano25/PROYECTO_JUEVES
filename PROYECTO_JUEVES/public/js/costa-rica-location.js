@@ -17,6 +17,10 @@
         return response.json();
     }
 
+    function placeholderFor(select, fallback) {
+        return select?.dataset.emptyLabel || fallback;
+    }
+
     function setOptions(select, data, placeholder, selectedValue) {
         const normalizedSelected = normalize(selectedValue);
         select.innerHTML = `<option value="">${placeholder}</option>`;
@@ -52,26 +56,28 @@
         const distrito = form.querySelector('[data-location-field="distrito"]');
         const status = form.querySelector("[data-location-status]");
 
-        if (!provincia || !canton || !distrito) {
+        if (!provincia || !canton) {
             return;
         }
 
         const initialProvincia = provincia.dataset.selected || provincia.value;
         const initialCanton = canton.dataset.selected || canton.value;
-        const initialDistrito = distrito.dataset.selected || distrito.value;
+        const initialDistrito = distrito ? (distrito.dataset.selected || distrito.value) : "";
 
-        resetSelect(canton, "Seleccione canton");
-        resetSelect(distrito, "Seleccione distrito");
+        resetSelect(canton, placeholderFor(canton, "Seleccione canton"));
+        if (distrito) {
+            resetSelect(distrito, placeholderFor(distrito, "Seleccione distrito"));
+        }
 
         try {
-            setOptions(provincia, await fetchOptions("/provincias.json"), "Seleccione provincia", initialProvincia);
+            setOptions(provincia, await fetchOptions("/provincias.json"), placeholderFor(provincia, "Seleccione provincia"), initialProvincia);
 
             if (initialProvincia && selectedLocationId(provincia)) {
-                setOptions(canton, await fetchOptions(`/provincia/${selectedLocationId(provincia)}/cantones.json`), "Seleccione canton", initialCanton);
+                setOptions(canton, await fetchOptions(`/provincia/${selectedLocationId(provincia)}/cantones.json`), placeholderFor(canton, "Seleccione canton"), initialCanton);
             }
 
-            if (initialCanton && selectedLocationId(provincia) && selectedLocationId(canton)) {
-                setOptions(distrito, await fetchOptions(`/provincia/${selectedLocationId(provincia)}/canton/${selectedLocationId(canton)}/distritos.json`), "Seleccione distrito", initialDistrito);
+            if (distrito && initialCanton && selectedLocationId(provincia) && selectedLocationId(canton)) {
+                setOptions(distrito, await fetchOptions(`/provincia/${selectedLocationId(provincia)}/canton/${selectedLocationId(canton)}/distritos.json`), placeholderFor(distrito, "Seleccione distrito"), initialDistrito);
             }
         } catch (error) {
             if (status) {
@@ -81,15 +87,17 @@
 
         provincia.addEventListener("change", async () => {
             resetSelect(canton, "Cargando cantones...");
-            resetSelect(distrito, "Seleccione distrito");
+            if (distrito) {
+                resetSelect(distrito, placeholderFor(distrito, "Seleccione distrito"));
+            }
 
             if (!selectedLocationId(provincia)) {
-                resetSelect(canton, "Seleccione canton");
+                resetSelect(canton, placeholderFor(canton, "Seleccione canton"));
                 return;
             }
 
             try {
-                setOptions(canton, await fetchOptions(`/provincia/${selectedLocationId(provincia)}/cantones.json`), "Seleccione canton");
+                setOptions(canton, await fetchOptions(`/provincia/${selectedLocationId(provincia)}/cantones.json`), placeholderFor(canton, "Seleccione canton"));
             } catch (error) {
                 resetSelect(canton, "No disponible");
                 if (status) {
@@ -98,16 +106,20 @@
             }
         });
 
+        if (!distrito) {
+            return;
+        }
+
         canton.addEventListener("change", async () => {
             resetSelect(distrito, "Cargando distritos...");
 
             if (!selectedLocationId(provincia) || !selectedLocationId(canton)) {
-                resetSelect(distrito, "Seleccione distrito");
+                resetSelect(distrito, placeholderFor(distrito, "Seleccione distrito"));
                 return;
             }
 
             try {
-                setOptions(distrito, await fetchOptions(`/provincia/${selectedLocationId(provincia)}/canton/${selectedLocationId(canton)}/distritos.json`), "Seleccione distrito");
+                setOptions(distrito, await fetchOptions(`/provincia/${selectedLocationId(provincia)}/canton/${selectedLocationId(canton)}/distritos.json`), placeholderFor(distrito, "Seleccione distrito"));
             } catch (error) {
                 resetSelect(distrito, "No disponible");
                 if (status) {

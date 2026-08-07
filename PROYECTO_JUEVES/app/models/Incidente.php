@@ -43,6 +43,28 @@ class Incidente {
         return $db->query("SELECT r.*, u.nombre, c.nombre_categoria FROM reportes r LEFT JOIN usuarios u ON r.id_usuario = u.id_usuario LEFT JOIN categorias c ON r.id_categoria = c.id_categoria ORDER BY r.prioridad DESC, r.fecha_creacion DESC");
     }
 
+    public static function obtenerFiltrados($filtros) {
+        $id_categoria = self::idPositivo($filtros['id_categoria'] ?? null);
+        $estado = $filtros['estado'] ?? '';
+        $estado = in_array($estado, self::$estadosPermitidos, true) ? $estado : '';
+        $provincia = trim($filtros['provincia'] ?? '');
+        $canton = trim($filtros['canton'] ?? '');
+
+        $db = Database::conectar();
+        $stmt = $db->prepare("SELECT r.*, u.nombre, c.nombre_categoria
+            FROM reportes r
+            LEFT JOIN usuarios u ON r.id_usuario = u.id_usuario
+            LEFT JOIN categorias c ON r.id_categoria = c.id_categoria
+            WHERE (? IS NULL OR r.id_categoria = ?)
+              AND (? = '' OR r.estado = ?)
+              AND (? = '' OR r.provincia = ?)
+              AND (? = '' OR r.canton = ?)
+            ORDER BY r.prioridad DESC, r.fecha_creacion DESC");
+        $stmt->bind_param("iissssss", $id_categoria, $id_categoria, $estado, $estado, $provincia, $provincia, $canton, $canton);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
     public static function obtenerPorId($id_reporte) {
         $id_reporte = self::idPositivo($id_reporte) ?? 0;
         $db = Database::conectar();
