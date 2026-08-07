@@ -52,13 +52,21 @@ if (isset($_GET['eliminar_categoria'])) {
 }
 
 if (isset($_POST['guardar_reporte'])) {
-    Incidente::crear($_SESSION['usuario']['id_usuario'], $_POST['id_categoria'], $_POST['titulo'], $_POST['descripcion'], $_POST['ubicacion'], $_POST['distrito'], $_POST['canton'], $_POST['provincia'], $_POST['imagen'], $_POST['estado'], $_POST['prioridad']);
+    $distrito = trim($_POST['distrito']);
+    $canton = trim($_POST['canton']);
+    $provincia = trim($_POST['provincia']);
+    $ubicacion = trim($distrito . ', ' . $canton . ', ' . $provincia);
+    Incidente::crear($_SESSION['usuario']['id_usuario'], $_POST['id_categoria'], $_POST['titulo'], $_POST['descripcion'], $ubicacion, $distrito, $canton, $provincia, $_POST['imagen'], $_POST['estado'], $_POST['prioridad']);
     header("Location: ../views/crud_reportes.php");
     exit();
 }
 
 if (isset($_POST['editar_reporte'])) {
-    Incidente::actualizar($_POST['id_reporte'], $_POST['id_categoria'], $_POST['titulo'], $_POST['descripcion'], $_POST['ubicacion'], $_POST['distrito'], $_POST['canton'], $_POST['provincia'], $_POST['imagen'], $_POST['estado'], $_POST['prioridad']);
+    $distrito = trim($_POST['distrito']);
+    $canton = trim($_POST['canton']);
+    $provincia = trim($_POST['provincia']);
+    $ubicacion = trim($distrito . ', ' . $canton . ', ' . $provincia);
+    Incidente::actualizar($_POST['id_reporte'], $_POST['id_categoria'], $_POST['titulo'], $_POST['descripcion'], $ubicacion, $distrito, $canton, $provincia, $_POST['imagen'], $_POST['estado'], $_POST['prioridad']);
     header("Location: ../views/crud_reportes.php");
     exit();
 }

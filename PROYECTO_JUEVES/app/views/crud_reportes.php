@@ -29,14 +29,14 @@ $editar = isset($_GET['editar']) ? Incidente::obtenerPorId($_GET['editar']) : nu
                 <a href="administracion.php" class="btn btn-outline-secondary">Volver</a>
             </div>
 
-            <form method="POST" action="../controllers/AdminCrudController.php" class="row g-3 mb-3">
+            <form method="POST" action="../controllers/AdminCrudController.php" class="row g-3 mb-3" data-location-form>
                 <input type="hidden" name="id_reporte" value="<?= isset($editar['id_reporte']) ? $editar['id_reporte'] : '' ?>">
                 <div class="col-md-3"><select class="form-select" name="id_categoria" required><option value="">Seleccione categoría</option><?php while ($c = $categorias->fetch_assoc()): ?><option value="<?= $c['id_categoria'] ?>" <?= ($editar['id_categoria'] ?? '') == $c['id_categoria'] ? 'selected' : '' ?>><?= $c['nombre_categoria'] ?></option><?php endwhile; ?></select></div>
                 <div class="col-md-3"><input type="text" class="form-control" name="titulo" placeholder="Título" value="<?= $editar['titulo'] ?? '' ?>" required></div>
-                <div class="col-md-3"><input type="text" class="form-control" name="ubicacion" placeholder="Ubicación" value="<?= $editar['ubicacion'] ?? '' ?>" required></div>
-                <div class="col-md-3"><input type="text" class="form-control" name="distrito" placeholder="Distrito" value="<?= $editar['distrito'] ?? '' ?>" required></div>
-                <div class="col-md-3"><input type="text" class="form-control" name="canton" placeholder="Cantón" value="<?= $editar['canton'] ?? '' ?>" required></div>
-                <div class="col-md-3"><input type="text" class="form-control" name="provincia" placeholder="Provincia" value="<?= $editar['provincia'] ?? '' ?>" required></div>
+                <div class="col-md-3"><select class="form-select" name="provincia" data-location-field="provincia" data-selected="<?= $editar['provincia'] ?? '' ?>" required><option value="">Cargando provincias...</option></select></div>
+                <div class="col-md-3"><select class="form-select" name="canton" data-location-field="canton" data-selected="<?= $editar['canton'] ?? '' ?>" required><option value="">Seleccione canton</option></select></div>
+                <div class="col-md-3"><select class="form-select" name="distrito" data-location-field="distrito" data-selected="<?= $editar['distrito'] ?? '' ?>" required><option value="">Seleccione distrito</option></select></div>
+                <div class="col-12"><small class="text-muted" data-location-status></small></div>
                 <div class="col-md-3"><input type="text" class="form-control" name="imagen" placeholder="URL imagen" value="<?= $editar['imagen'] ?? '' ?>"></div>
                 <div class="col-md-3">
                     <select class="form-select" name="estado">
@@ -84,6 +84,7 @@ $editar = isset($_GET['editar']) ? Incidente::obtenerPorId($_GET['editar']) : nu
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="../../public/js/costa-rica-location.js"></script>
 <script>
 $(document).ready(function () {
     $('#tablaReportes').DataTable({language:{url:'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'}});
