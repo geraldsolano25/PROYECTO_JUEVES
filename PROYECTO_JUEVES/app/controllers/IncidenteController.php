@@ -13,10 +13,10 @@ if (isset($_POST['crear_reporte'])) {
     $id_categoria = $_POST['id_categoria'];
     $titulo = $_POST['titulo'];
     $descripcion = $_POST['descripcion'];
-    $ubicacion = $_POST['ubicacion'];
-    $distrito = $_POST['distrito'];
-    $canton = $_POST['canton'];
-    $provincia = $_POST['provincia'];
+    $distrito = trim($_POST['distrito']);
+    $canton = trim($_POST['canton']);
+    $provincia = trim($_POST['provincia']);
+    $ubicacion = trim($distrito . ', ' . $canton . ', ' . $provincia);
     $imagen = $_POST['imagen'] ?? '';
     $estado = 'pendiente';
     $prioridad = 'media';

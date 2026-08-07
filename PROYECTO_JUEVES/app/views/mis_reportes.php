@@ -42,7 +42,7 @@ $misReportes = Incidente::obtenerPorUsuario($_SESSION['usuario']['id_usuario']);
                         </div>
                         <p class="mt-2 mb-2"><?= $r['descripcion'] ?></p>
                         <div class="text-muted small">
-                            Ubicacion: <?= $r['ubicacion'] ?>, <?= $r['distrito'] ?>, <?= $r['canton'] ?>, <?= $r['provincia'] ?><br>
+                            Zona: <?= $r['distrito'] ?>, <?= $r['canton'] ?>, <?= $r['provincia'] ?><br>
                             Creado: <?= $r['fecha_creacion'] ?>
                         </div>
                         <?php if (!empty($r['imagen'])): ?>
