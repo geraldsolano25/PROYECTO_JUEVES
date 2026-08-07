@@ -1,1 +1,4 @@
 .vs/
+vendor/
+config/mail.local.php
+storage/mail.log

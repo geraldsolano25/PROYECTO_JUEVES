@@ -68,7 +68,7 @@ class Incidente {
     public static function obtenerPorId($id_reporte) {
         $id_reporte = self::idPositivo($id_reporte) ?? 0;
         $db = Database::conectar();
-        $stmt = $db->prepare("SELECT r.*, u.nombre, c.nombre_categoria FROM reportes r LEFT JOIN usuarios u ON r.id_usuario = u.id_usuario LEFT JOIN categorias c ON r.id_categoria = c.id_categoria WHERE r.id_reporte = ?");
+        $stmt = $db->prepare("SELECT r.*, u.nombre, u.correo, c.nombre_categoria FROM reportes r LEFT JOIN usuarios u ON r.id_usuario = u.id_usuario LEFT JOIN categorias c ON r.id_categoria = c.id_categoria WHERE r.id_reporte = ?");
         $stmt->bind_param("i", $id_reporte);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
@@ -78,7 +78,7 @@ class Incidente {
         $id_reporte = self::idPositivo($id_reporte) ?? 0;
         $id_usuario = self::idPositivo($id_usuario) ?? 0;
         $db = Database::conectar();
-        $stmt = $db->prepare("SELECT r.*, u.nombre, c.nombre_categoria FROM reportes r LEFT JOIN usuarios u ON r.id_usuario = u.id_usuario LEFT JOIN categorias c ON r.id_categoria = c.id_categoria WHERE r.id_reporte = ? AND r.id_usuario = ?");
+        $stmt = $db->prepare("SELECT r.*, u.nombre, u.correo, c.nombre_categoria FROM reportes r LEFT JOIN usuarios u ON r.id_usuario = u.id_usuario LEFT JOIN categorias c ON r.id_categoria = c.id_categoria WHERE r.id_reporte = ? AND r.id_usuario = ?");
         $stmt->bind_param("ii", $id_reporte, $id_usuario);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
@@ -124,6 +124,35 @@ class Incidente {
         $stmt = $db->prepare("UPDATE reportes SET id_categoria = ?, titulo = ?, descripcion = ?, ubicacion = ?, distrito = ?, canton = ?, provincia = ?, imagen = ?, estado = ?, prioridad = ?, fecha_actualizacion = NOW() WHERE id_reporte = ?");
         $stmt->bind_param("isssssssssi", $id_categoria, $titulo, $descripcion, $ubicacion, $distrito, $canton, $provincia, $imagen, $estado, $prioridad, $id_reporte);
         return $stmt->execute();
+    }
+
+    public static function actualizarPendientePorUsuario($id_reporte, $id_usuario, $id_categoria, $titulo, $descripcion, $ubicacion, $distrito, $canton, $provincia, $imagen) {
+        $id_reporte = self::idPositivo($id_reporte);
+        $id_usuario = self::idPositivo($id_usuario);
+        $id_categoria = self::idPositivo($id_categoria);
+        if ($id_reporte === null || $id_usuario === null || $id_categoria === null) {
+            return false;
+        }
+
+        $db = Database::conectar();
+        $stmt = $db->prepare("UPDATE reportes
+            SET id_categoria = ?, titulo = ?, descripcion = ?, ubicacion = ?, distrito = ?, canton = ?, provincia = ?, imagen = ?, fecha_actualizacion = NOW()
+            WHERE id_reporte = ? AND id_usuario = ? AND estado = 'pendiente'");
+        $stmt->bind_param("isssssssii", $id_categoria, $titulo, $descripcion, $ubicacion, $distrito, $canton, $provincia, $imagen, $id_reporte, $id_usuario);
+        return $stmt->execute() && $stmt->affected_rows > 0;
+    }
+
+    public static function eliminarPendientePorUsuario($id_reporte, $id_usuario) {
+        $id_reporte = self::idPositivo($id_reporte);
+        $id_usuario = self::idPositivo($id_usuario);
+        if ($id_reporte === null || $id_usuario === null) {
+            return false;
+        }
+
+        $db = Database::conectar();
+        $stmt = $db->prepare("DELETE FROM reportes WHERE id_reporte = ? AND id_usuario = ? AND estado = 'pendiente'");
+        $stmt->bind_param("ii", $id_reporte, $id_usuario);
+        return $stmt->execute() && $stmt->affected_rows > 0;
     }
 
     public static function eliminar($id_reporte) {

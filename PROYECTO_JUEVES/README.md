@@ -6,6 +6,8 @@ El sistema esta construido con PHP, MySQL, HTML, CSS y Bootstrap. La aplicacion 
 
 El proyecto contempla dos tipos principales de usuario: ciudadanos y administradores. Los ciudadanos pueden registrar incidentes, revisar sus propios reportes y apoyar reportes comunitarios mediante votos. Los administradores cuentan con herramientas para gestionar usuarios, categorias, reportes, seguimientos y votos, ademas de actualizar el estado y la prioridad de los casos.
 
+Para los avisos al ciudadano, el sistema integra PHPMailer y puede notificar por correo cuando un administrador cambia el estado de un reporte. La configuracion base esta en `config/mail.php`; las credenciales reales se colocan en un archivo local privado `config/mail.local.php`, tomando como referencia `config/mail.local.example.php`. Si el correo SMTP aun no esta configurado, la aplicacion registra el mensaje en `storage/mail.log` para poder validar el flujo sin exponer contrasenas.
+
 La base de datos principal se llama `PROYECTO_JUEVES` y organiza la informacion en tablas para usuarios, categorias, reportes, seguimiento de reportes y votos. El esquema inicial se encuentra en `sql/incidentes_comunitarios.sql`, mientras que la configuracion de conexion y creacion basica de tablas esta en `config/database.php`.
 
 Como idea general, el proyecto busca representar una solucion de participacion ciudadana digital, donde los reportes no solo se registran, sino que tambien pueden ser priorizados, revisados y acompanados durante su proceso de atencion.

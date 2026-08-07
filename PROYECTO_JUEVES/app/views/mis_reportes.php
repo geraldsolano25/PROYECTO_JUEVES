@@ -19,13 +19,29 @@ $misReportes = Incidente::obtenerPorUsuario($_SESSION['usuario']['id_usuario']);
     <link rel="stylesheet" href="../../public/css/styles.css">
 </head>
 <body>
+<?php include "partials/main_nav.php"; ?>
 <div class="container py-4">
     <div class="card shadow-sm">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2 class="mb-0">Mis reportes</h2>
-                <a href="dashboard.php" class="btn btn-outline-secondary">Volver</a>
+                <div class="d-flex gap-2">
+                    <a href="perfil.php" class="btn btn-outline-primary">Mi perfil</a>
+                    <a href="dashboard.php" class="btn btn-outline-secondary">Volver</a>
+                </div>
             </div>
+
+            <?php if (isset($_GET['reporte_actualizado'])): ?>
+                <div class="alert alert-success">Reporte actualizado correctamente.</div>
+            <?php endif; ?>
+
+            <?php if (isset($_GET['reporte_cancelado'])): ?>
+                <div class="alert alert-success">Reporte cancelado correctamente.</div>
+            <?php endif; ?>
+
+            <?php if (isset($_GET['error']) && $_GET['error'] === 'accion_no_permitida'): ?>
+                <div class="alert alert-warning">Solo puede editar o cancelar reportes que sigan pendientes.</div>
+            <?php endif; ?>
 
             <?php if ($misReportes->num_rows > 0): ?>
                 <?php while ($r = $misReportes->fetch_assoc()): ?>
@@ -41,6 +57,7 @@ $misReportes = Incidente::obtenerPorUsuario($_SESSION['usuario']['id_usuario']);
                             </div>
                         </div>
                         <p class="mt-2 mb-2"><?= $r['descripcion'] ?></p>
+                        <?= imagenReporteHtml($r['imagen'] ?? '', $r['titulo']) ?>
                         <div class="text-muted small">
                             Zona: <?= $r['distrito'] ?>, <?= $r['canton'] ?>, <?= $r['provincia'] ?><br>
                             Creado: <?= $r['fecha_creacion'] ?>
@@ -48,8 +65,15 @@ $misReportes = Incidente::obtenerPorUsuario($_SESSION['usuario']['id_usuario']);
                         <?php if (!empty($r['imagen'])): ?>
                             <a href="<?= $r['imagen'] ?>" target="_blank" rel="noopener">Ver evidencia</a>
                         <?php endif; ?>
-                        <div class="mt-2">
+                        <div class="mt-2 d-flex gap-2 flex-wrap">
                             <a href="detalle_reporte.php?id=<?= $r['id_reporte'] ?>" class="btn btn-sm btn-outline-primary">Ver seguimiento</a>
+                            <?php if ($r['estado'] === 'pendiente'): ?>
+                                <a href="editar_mi_reporte.php?id=<?= $r['id_reporte'] ?>" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                <form method="POST" action="../controllers/IncidenteController.php" class="d-inline">
+                                    <input type="hidden" name="id_reporte" value="<?= $r['id_reporte'] ?>">
+                                    <button class="btn btn-sm btn-outline-danger" name="cancelar_reporte_pendiente" onclick="return confirm('¿Cancelar este reporte pendiente?')">Cancelar</button>
+                                </form>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endwhile; ?>

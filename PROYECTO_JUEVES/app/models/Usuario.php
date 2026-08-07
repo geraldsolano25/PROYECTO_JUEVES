@@ -61,6 +61,25 @@ class Usuario {
         return $stmt->execute();
     }
 
+    public static function actualizarPerfil($id, $nombre, $correo, $telefono, $password = '') {
+        $db = Database::conectar();
+
+        if (trim($password) !== '') {
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $db->prepare("UPDATE usuarios SET nombre = ?, correo = ?, telefono = ?, password = ? WHERE id_usuario = ?");
+            $stmt->bind_param("ssssi", $nombre, $correo, $telefono, $hash, $id);
+        } else {
+            $stmt = $db->prepare("UPDATE usuarios SET nombre = ?, correo = ?, telefono = ? WHERE id_usuario = ?");
+            $stmt->bind_param("sssi", $nombre, $correo, $telefono, $id);
+        }
+
+        try {
+            return $stmt->execute();
+        } catch (mysqli_sql_exception $e) {
+            return false;
+        }
+    }
+
     public static function eliminar($id) {
         $db = Database::conectar();
         $stmt = $db->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
