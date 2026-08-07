@@ -52,6 +52,16 @@ class Incidente {
         return $stmt->get_result()->fetch_assoc();
     }
 
+    public static function obtenerPorIdYUsuario($id_reporte, $id_usuario) {
+        $id_reporte = self::idPositivo($id_reporte) ?? 0;
+        $id_usuario = self::idPositivo($id_usuario) ?? 0;
+        $db = Database::conectar();
+        $stmt = $db->prepare("SELECT r.*, u.nombre, c.nombre_categoria FROM reportes r LEFT JOIN usuarios u ON r.id_usuario = u.id_usuario LEFT JOIN categorias c ON r.id_categoria = c.id_categoria WHERE r.id_reporte = ? AND r.id_usuario = ?");
+        $stmt->bind_param("ii", $id_reporte, $id_usuario);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+
     public static function actualizarEstado($id_reporte, $estado, $prioridad, $comentario, $id_usuario_admin) {
         $id_reporte = self::idPositivo($id_reporte);
         $id_usuario_admin = self::idPositivo($id_usuario_admin);

@@ -426,6 +426,58 @@ textarea:not(.form-control) {
     border-radius: inherit;
 }
 
+.timeline {
+    position: relative;
+    display: grid;
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.timeline-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 12px;
+}
+
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    top: 18px;
+    bottom: -18px;
+    left: 8px;
+    width: 2px;
+    background: var(--border);
+}
+
+.timeline-item:last-child::before {
+    display: none;
+}
+
+.timeline-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--ink-700);
+    border: 3px solid var(--surface);
+    box-shadow: 0 0 0 1px var(--border-strong);
+    margin-top: 4px;
+    z-index: 1;
+}
+
+.timeline-content {
+    background: var(--bg-canvas);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 12px;
+}
+
+.timeline-arrow {
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-right: 4px;
+}
+
 
 .table th {
     background: var(--ink-900);

@@ -71,6 +71,7 @@ $editar = isset($_GET['editar']) ? Incidente::obtenerPorId($_GET['editar']) : nu
                             <td><span class="status-badge <?= estadoReporteClass($r['estado']) ?>"><?= estadoReporteLabel($r['estado']) ?></span></td>
                             <td><span class="priority-badge <?= prioridadReporteClass($r['prioridad']) ?>"><?= prioridadReporteLabel($r['prioridad']) ?></span></td>
                             <td>
+                                <a href="detalle_reporte.php?id=<?= $r['id_reporte'] ?>" class="btn btn-sm btn-outline-secondary">Detalle</a>
                                 <a href="crud_reportes.php?editar=<?= $r['id_reporte'] ?>" class="btn btn-sm btn-outline-primary">Editar</a>
                                 <a href="../controllers/AdminCrudController.php?eliminar_reporte=<?= $r['id_reporte'] ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar reporte?')">Eliminar</a>
                             </td>
