@@ -16,7 +16,6 @@
                 <div class="mb-3"><input type="email" class="form-control" name="correo" placeholder="Correo" required></div>
                 <div class="mb-3"><input type="password" class="form-control" name="password" placeholder="Contraseña" required></div>
                 <div class="mb-3"><input type="text" class="form-control" name="telefono" placeholder="Teléfono (opcional)"></div>
-                <div class="mb-3"><select class="form-select" name="rol"><option value="ciudadano">Ciudadano</option><option value="admin">Administrador</option></select></div>
                 <button class="btn btn-primary w-100" name="accion" value="registro">Registrarse</button>
             </form>
             <div class="text-center mt-3"><a href="../../public/index.php">Volver al login</a></div>

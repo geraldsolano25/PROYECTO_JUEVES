@@ -1,5 +1,5 @@
 /* ============================================================
-   ALERTACOMUNAL — TEMA INSTITUCIONAL
+   ALERTACOMUNAL - TEMA INSTITUCIONAL
    ============================================================ */
 
 :root {
@@ -7,8 +7,9 @@
     --ink-900:  #082750;   
     --ink-700: 	#44779e;   
     --ink-500:  #97a78c;   
-    --brown:    #cac0bb;   
-    --bronw-light: 	#f8e9bb;
+    --brown:    #cac0bb;
+    --brass:    #cac0bb;
+    --brass-light: #f8e9bb;
 
     /* Superficies */
     --bg-canvas: #e8edf3;
