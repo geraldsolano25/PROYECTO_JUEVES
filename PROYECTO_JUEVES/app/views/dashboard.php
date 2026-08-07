@@ -39,7 +39,7 @@ $esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
                 <li class="nav-item"><a class="nav-link" href="crud_seguimientos.php">Seguimientos</a></li>
                 <li class="nav-item"><a class="nav-link" href="crud_votos.php">Votos</a></li>
                 <?php endif; ?>
-                <li class="nav-item"><a class="nav-link" href="mis_reservas.php">Mis reportes</a></li>
+                <li class="nav-item"><a class="nav-link" href="mis_reportes.php">Mis reportes</a></li>
             </ul>
             <a class="btn btn-outline-light btn-sm" href="../controllers/AuthController.php?logout=true">Cerrar sesión</a>
         </div>
@@ -59,7 +59,7 @@ $esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
     <?php endif; ?>
 
     <?php if (isset($_GET['error']) && $_GET['error'] === 'sin_permiso'): ?>
-        <div class="alert alert-warning">No tiene permisos para acceder a esa secciÃ³n.</div>
+        <div class="alert alert-warning">No tiene permisos para acceder a esa seccion.</div>
     <?php endif; ?>
 
     <div class="card shadow-sm mb-4" id="reportar">
