@@ -10,8 +10,16 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 $categorias = Categoria::obtenerActivas();
+$categoriasFiltro = Categoria::obtenerActivas();
 $misReportes = Incidente::obtenerPorUsuario($_SESSION['usuario']['id_usuario']);
-$reportes = Incidente::obtenerTodos();
+$filtrosReportes = [
+    'id_categoria' => $_GET['id_categoria'] ?? '',
+    'estado' => $_GET['estado'] ?? '',
+    'provincia' => $_GET['provincia'] ?? '',
+    'canton' => $_GET['canton'] ?? '',
+];
+$hayFiltros = array_filter($filtrosReportes, fn($valor) => trim((string) $valor) !== '') !== [];
+$reportes = Incidente::obtenerFiltrados($filtrosReportes);
 $esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
 ?>
 
@@ -106,21 +114,64 @@ $esAdmin = ($_SESSION['usuario']['rol'] ?? '') === 'admin';
 
     <div class="card shadow-sm" id="reportes-comunitarios">
         <div class="card-body">
-            <h3>Reportes comunitarios</h3>
-            <?php while ($r = $reportes->fetch_assoc()): ?>
-                <div class="border rounded p-3 mb-2">
-                    <strong><?= $r['titulo'] ?></strong><br>
-                    <span class="text-muted"><?= $r['nombre'] ?> · <?= $r['nombre_categoria'] ?></span><br>
-                    <?= $r['descripcion'] ?><br>
-                    Zona: <?= $r['distrito'] ?>, <?= $r['canton'] ?>, <?= $r['provincia'] ?><br>
-                    <div class="report-meta">
-                        <span class="status-badge <?= estadoReporteClass($r['estado']) ?>"><?= estadoReporteLabel($r['estado']) ?></span>
-                        <span class="priority-badge <?= prioridadReporteClass($r['prioridad']) ?>"><?= prioridadReporteLabel($r['prioridad']) ?></span>
-                        <span class="vote-count">Votos: <?= Incidente::contarVotos($r['id_reporte']) ?></span>
-                    </div>
-                    <a href="../controllers/IncidenteController.php?votar=<?= $r['id_reporte'] ?>" class="btn btn-sm btn-outline-primary mt-2">Votar prioridad</a>
+            <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap mb-3">
+                <h3 class="mb-0">Reportes comunitarios</h3>
+                <?php if ($hayFiltros): ?>
+                    <a href="dashboard.php#reportes-comunitarios" class="btn btn-sm btn-outline-secondary">Limpiar filtros</a>
+                <?php endif; ?>
+            </div>
+
+            <form method="GET" action="dashboard.php#reportes-comunitarios" class="row g-3 mb-4" data-location-form>
+                <div class="col-md-3">
+                    <select class="form-select" name="id_categoria">
+                        <option value="">Todas las categorias</option>
+                        <?php while ($c = $categoriasFiltro->fetch_assoc()): ?>
+                            <option value="<?= $c['id_categoria'] ?>" <?= ($filtrosReportes['id_categoria'] ?? '') == $c['id_categoria'] ? 'selected' : '' ?>><?= $c['nombre_categoria'] ?></option>
+                        <?php endwhile; ?>
+                    </select>
                 </div>
-            <?php endwhile; ?>
+                <div class="col-md-3">
+                    <select class="form-select" name="estado">
+                        <option value="">Todos los estados</option>
+                        <?php foreach (estadosReporte() as $valor => $texto): ?>
+                            <option value="<?= $valor ?>" <?= ($filtrosReportes['estado'] ?? '') == $valor ? 'selected' : '' ?>><?= $texto ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="provincia" data-location-field="provincia" data-selected="<?= $filtrosReportes['provincia'] ?>" data-empty-label="Todas las provincias">
+                        <option value="">Cargando provincias...</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="canton" data-location-field="canton" data-selected="<?= $filtrosReportes['canton'] ?>" data-empty-label="Todos los cantones">
+                        <option value="">Todos los cantones</option>
+                    </select>
+                </div>
+                <div class="col-12"><small class="text-muted" data-location-status></small></div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary w-100" type="submit">Filtrar</button>
+                </div>
+            </form>
+
+            <?php if ($reportes->num_rows > 0): ?>
+                <?php while ($r = $reportes->fetch_assoc()): ?>
+                    <div class="border rounded p-3 mb-2">
+                        <strong><?= $r['titulo'] ?></strong><br>
+                        <span class="text-muted"><?= $r['nombre'] ?> · <?= $r['nombre_categoria'] ?></span><br>
+                        <?= $r['descripcion'] ?><br>
+                        Zona: <?= $r['distrito'] ?>, <?= $r['canton'] ?>, <?= $r['provincia'] ?><br>
+                        <div class="report-meta">
+                            <span class="status-badge <?= estadoReporteClass($r['estado']) ?>"><?= estadoReporteLabel($r['estado']) ?></span>
+                            <span class="priority-badge <?= prioridadReporteClass($r['prioridad']) ?>"><?= prioridadReporteLabel($r['prioridad']) ?></span>
+                            <span class="vote-count">Votos: <?= Incidente::contarVotos($r['id_reporte']) ?></span>
+                        </div>
+                        <a href="../controllers/IncidenteController.php?votar=<?= $r['id_reporte'] ?>" class="btn btn-sm btn-outline-primary mt-2">Votar prioridad</a>
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <div class="alert alert-info mb-0">No hay reportes que coincidan con los filtros seleccionados.</div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
