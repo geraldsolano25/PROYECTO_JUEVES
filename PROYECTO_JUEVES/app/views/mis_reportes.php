@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once "../models/Incidente.php";
+require_once "../helpers/report_format.php";
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: ../../public/index.php");
@@ -35,8 +36,8 @@ $misReportes = Incidente::obtenerPorUsuario($_SESSION['usuario']['id_usuario']);
                                 <span class="text-muted"><?= $r['nombre_categoria'] ?></span>
                             </div>
                             <div>
-                                <span class="badge bg-<?= $r['estado'] == 'resuelto' ? 'success' : ($r['estado'] == 'en_proceso' ? 'warning' : 'secondary') ?>"><?= $r['estado'] ?></span>
-                                <span class="badge bg-<?= $r['prioridad'] == 'alta' ? 'danger' : ($r['prioridad'] == 'media' ? 'warning' : 'secondary') ?>"><?= $r['prioridad'] ?></span>
+                                <span class="status-badge <?= estadoReporteClass($r['estado']) ?>"><?= estadoReporteLabel($r['estado']) ?></span>
+                                <span class="priority-badge <?= prioridadReporteClass($r['prioridad']) ?>"><?= prioridadReporteLabel($r['prioridad']) ?></span>
                             </div>
                         </div>
                         <p class="mt-2 mb-2"><?= $r['descripcion'] ?></p>
